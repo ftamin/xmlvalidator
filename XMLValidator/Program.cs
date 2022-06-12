@@ -5,6 +5,8 @@ using System;
 
 public class Program
 {
+    public const string sampleFolder = "sample/";
+
     public static void Main()
     {
 
@@ -16,11 +18,38 @@ public class Program
         settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
         settings.ValidationEventHandler += new ValidationEventHandler(ValidationCallBack);
 
-        // Create the XmlReader object.
-        XmlReader reader = XmlReader.Create("sample/example2.xml", settings);
+        var files = Directory.GetFiles(sampleFolder, "*.zip");
 
-        // Parse the file. 
-        while (reader.Read());
+        foreach (var file in files)
+        {
+            Console.WriteLine("Extracting: " + file);
+
+            try
+            {
+                System.IO.Compression.ZipFile.ExtractToDirectory(file, sampleFolder, true);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error extracting: " + file + ", message:" + ex.Message);
+                continue; // error extracting, continuing...
+            }
+            Console.WriteLine();
+        }
+
+        files = Directory.GetFiles(sampleFolder, "*.xml");
+        
+        foreach(var file in files)
+        {
+            Console.WriteLine("Processing: " + file);
+            // Create the XmlReader object.
+            XmlReader reader = XmlReader.Create(file, settings);
+
+           // Parse the file. 
+            while (reader.Read());
+            reader.Close();
+
+            Console.WriteLine();
+        }
 
         Console.WriteLine();
         Console.WriteLine();

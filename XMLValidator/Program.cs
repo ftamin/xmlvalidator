@@ -17,7 +17,7 @@ public class Program
         settings.ValidationEventHandler += new ValidationEventHandler(ValidationCallBack);
 
         // Create the XmlReader object.
-        XmlReader reader = XmlReader.Create("sample/example3.xml", settings);
+        XmlReader reader = XmlReader.Create("sample/example2.xml", settings);
 
         // Parse the file. 
         while (reader.Read());
